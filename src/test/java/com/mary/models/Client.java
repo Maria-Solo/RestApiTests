@@ -1,16 +1,32 @@
-package com.mary.model;
+package com.mary.models;
 
 import java.time.LocalDateTime;
 
-public class ClientDTO {
+public class Client {
+    public Long id;
     public String name;
     public String email;
     public String phone;
     public String company;
     public LocalDateTime createdAt;
 
-    //нужен ли конструктор?
+    public Client(String name, String email, String phone, String company, LocalDateTime createdAt) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.company = company;
+        this.createdAt = createdAt;
+    }
 
+    public Client() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

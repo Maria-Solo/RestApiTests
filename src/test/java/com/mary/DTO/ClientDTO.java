@@ -1,13 +1,16 @@
-package com.mary.model;
+package com.mary.DTO;
 
 import java.time.LocalDateTime;
 
-public class ProviderDTO {
+public class ClientDTO {
     public String name;
     public String email;
     public String phone;
-    public String serviceType;
+    public String company;
     public LocalDateTime createdAt;
+
+    //нужен ли конструктор?
+
 
     public String getName() {
         return name;
@@ -33,12 +36,12 @@ public class ProviderDTO {
         this.phone = phone;
     }
 
-    public String getServiceType() {
-        return serviceType;
+    public String getCompany() {
+        return company;
     }
 
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public LocalDateTime getCreatedAt() {
