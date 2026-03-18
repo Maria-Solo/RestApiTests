@@ -4,7 +4,8 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.mary.specifcation.Specifications.requestSpec;
+
+import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
