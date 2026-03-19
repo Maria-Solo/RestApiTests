@@ -1,43 +1,39 @@
 package com.mary.client;
 
-import groovyjarjarantlr4.runtime.tree.RewriteEmptyStreamException;
 import io.restassured.response.Response;
-import org.junit.platform.engine.support.discovery.SelectorResolver;
 
 import static io.restassured.RestAssured.given;
 
-public class ClientApiClient {
-
+public class ProviderApiClient {
     public Response getAll(){
         return given()
                 .when()
-                .get("/clients");
+                .get("/providers");
     }
 
     public Response getById(int id){
         return given()
                 .when()
-                .get("/clients/" + id);
+                .get("/providers/" + id);
     }
 
     public Response create(String body){
         return given()
                 .body(body)
                 .when()
-                .post("/clients");
+                .post("/providers");
     }
 
     public Response update(String body, int id){
         return given()
                 .body(body)
                 .when()
-                .put("/clients/" + id);
+                .put("/providers/" + id);
     }
 
     public Response delete(int id) {
         return given()
                 .when()
-                .delete("/clients/" + id);
+                .delete("/providers/" + id);
     }
-
 }

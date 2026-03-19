@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -19,7 +20,7 @@ public class ClientTests extends BaseTest {
         client.getAll()
                 .then()
                 .statusCode(200)
-                .body("$", hasSize(3));
+                .body("$", hasSize(4));
     }
 
     @Test
@@ -64,7 +65,7 @@ public class ClientTests extends BaseTest {
                 "company": "SSL Solutions"
                 }
                 """;
-        client.update(body, 4)
+        client.update(body, 8)
                 .then()
                 .statusCode(200)
                 .body("email", equalTo("masha1@test.com"))
@@ -74,9 +75,18 @@ public class ClientTests extends BaseTest {
     @Test
     @DisplayName("Удаление клиента")
     public void deleteClient(){
-       client.delete(4)
+       client.delete(8)
                 .then()
                 .statusCode(204);
+    }
+
+    @Test
+    @DisplayName("Get client by id with schema validation")
+    public void shouldGetClientByIdWithSchemaValidation() {
+        client.getById(1)
+                .then()
+                .statusCode(200)
+                .body(matchesJsonSchemaInClasspath("schemas/client-schema.json"));
     }
 
 

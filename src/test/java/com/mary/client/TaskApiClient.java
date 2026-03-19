@@ -34,6 +34,6 @@ public class TaskApiClient {
     public Response delete(int id) {
         return given()
                 .when()
-                .get("/clients/" + id);
+                .delete("/tasks/" + id);
     }
 }

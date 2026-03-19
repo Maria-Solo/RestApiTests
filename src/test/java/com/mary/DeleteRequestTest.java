@@ -16,11 +16,10 @@ public class DeleteRequestTest {
         given()
                 .spec(requestSpec())
                 .when()
-                .delete("/clients/5")
+                .delete("/clients/7")
                 .then()
                 .statusCode(204);
     }
-    /// check cascade deleting (when we delet a client, their tasks also delete)
 
     @Test
     @DisplayName("Delete a task")
