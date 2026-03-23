@@ -1,5 +1,6 @@
 package com.mary.models;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class Provider {
@@ -123,7 +124,7 @@ public class Provider {
             provider.email = this.email;
             provider.phone = this.phone;
             provider.serviceType = this.serviceType;
-            provider.createdAt = this.createdAt;
+            provider.createdAt= this.createdAt;
             return provider;
         }
     }

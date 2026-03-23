@@ -1,9 +1,14 @@
 package com.mary.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mary.models.Provider;
 import io.restassured.response.Response;
-import org.codehaus.groovy.control.io.ReaderSource;
 
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -47,7 +52,17 @@ public class ProviderApiClient {
                 .when()
                 .get("/providers");
         response.then().statusCode(200);
-        return response.jsonPath().getList("", Provider.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        String jsonString = response.asString();
+        try {
+            return mapper.readValue(jsonString, new TypeReference<List<Provider>>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize providers", e);
+        }
     }
 
     public Provider getProviderById(int id) {

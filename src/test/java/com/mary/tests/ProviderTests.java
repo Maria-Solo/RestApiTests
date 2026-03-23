@@ -83,7 +83,7 @@ public class ProviderTests extends BaseTest {
     @Test
     @DisplayName("Delete a provider")
     public void deleteProvider() {
-        provider.delete(5)
+        provider.delete(4)
                 .then()
                 .statusCode(204);
     }
@@ -139,16 +139,16 @@ public class ProviderTests extends BaseTest {
                 .serviceType(Provider.ServiceType.SECURITY)
                 .build();
 
-        Provider updated = provider.updateProvider(6, updatedProvider);
+        Provider updated = provider.updateProvider(8, updatedProvider);
 
-        assertThat(updated.getId()).isEqualTo(6);
+        assertThat(updated.getId()).isEqualTo(8);
         assertThat(updated.getName()).isEqualTo("Updated Provider");
         assertThat(updated.getEmail()).isEqualTo("update@provider.com");
         assertThat(updated.getPhone()).isEqualTo("+1234567891");          // ← добавил проверку телефона
         assertThat(updated.getServiceType()).isEqualTo(Provider.ServiceType.SECURITY);
         assertThat(updated.getCreatedAt()).isNotNull();
 
-        Provider fetched = provider.getProviderById(6);
+        Provider fetched = provider.getProviderById(8);
         assertThat(fetched.getName()).isEqualTo("Updated Provider");
         assertThat(fetched.getEmail()).isEqualTo("update@provider.com");
     }
@@ -157,13 +157,15 @@ public class ProviderTests extends BaseTest {
     void shouldDeleteProvider() {
         // Создаем провайдера для теста
         Provider testProvider = createTestProvider();
+        System.out.println("Провайдер создан");
 
         // Удаляем его
         provider.deleteProvider(Math.toIntExact(testProvider.getId()));
+        System.out.println("Провайдер удален");
 
         // Проверяем, что он действительно удален
         assertThatThrownBy(() -> provider.getProviderById(Math.toIntExact(testProvider.getId())))
-                .isInstanceOf(Exception.class);
+                .isInstanceOf(AssertionError.class);
     }
 
     private Provider createTestProvider() {

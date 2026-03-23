@@ -10,6 +10,14 @@ public class Task {
     public Client client;
     public Provider provider;
 
+    public Task(Long id, String title, String description, String status, Long clientId, Long providerId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.clientId = clientId;
+        this.providerId = providerId;
+    }
 
     public Task() {}
 
@@ -76,4 +84,5 @@ public class Task {
     public void setProvider(Provider provider) {
         this.provider = provider;
     }
+
 }
