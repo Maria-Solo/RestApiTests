@@ -11,5 +11,7 @@ public class BaseTest {
     @BeforeAll
     public static void setup() {
         RestAssured.requestSpecification = RequestSpec.requestSpec();
+
+        /// тут вызываем мето давторизации
     }
 }
