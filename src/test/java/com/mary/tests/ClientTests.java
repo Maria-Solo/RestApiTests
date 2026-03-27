@@ -2,16 +2,25 @@ package com.mary.tests;
 
 import com.mary.BaseTest;
 import com.mary.client.ClientApiClient;
+import com.mary.models.Client;
+import com.mary.models.Provider;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class ClientTests extends BaseTest {
+    private static final Log log = LogFactory.getLog(ClientTests.class);
     ClientApiClient client = new ClientApiClient();
 
     @Test
@@ -89,5 +98,79 @@ public class ClientTests extends BaseTest {
                 .body(matchesJsonSchemaInClasspath("schemas/client-schema.json"));
     }
 
+    @Test
+    void shouldGetAllClients(){
+        List<Client> clients = client.getAllClients();
+        assertThat(clients)
+                .isNotEmpty();
+    }
 
+    @Test
+    void shouldGetOneClientById(){
+        Client foundClient = client.getClientById(1L);
+        assertThat(foundClient.getId()).isEqualTo(1);
+        assertThat(foundClient.getName()).isEqualTo("John Doe");
+    }
+
+    @Test
+    void shouldCreateClient(){
+        var newClient = new Client()
+                .setName("Test")
+                .setEmail("test@test.com")
+                .setPhone("+1234561212")
+                .setCompany("SSL");
+        Client created = client.createClient(newClient);
+
+        assertThat(created.getName()).isEqualTo("Test");
+        assertThat(created.getEmail()).isEqualTo("test@test.com");
+        assertThat(created.getPhone()).isEqualTo("+1234561212");
+        assertThat(created.getCompany()).isEqualTo("SSL");
+        assertThat(created.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void shouldUpdateClient(){
+        var updatedClient = new Client()
+                .setName("Test1")
+                .setEmail("test1@test.com")
+                .setPhone("+1234561213")
+                .setCompany("SSL1");
+
+        Client updated = client.updateClient(6L, updatedClient);
+        assertThat(updated.getName()).isEqualTo("Test1");
+        assertThat(updated.getEmail()).isEqualTo("test1@test.com");
+        assertThat(updated.getPhone()).isEqualTo("+1234561213");
+        assertThat(updated.getCompany()).isEqualTo("SSL1");
+        assertThat(updated.getCreatedAt()).isNotNull();
+
+        Client fetched = client.getClientById(6L);
+        assertThat(fetched.getName()).isEqualTo("Test1");
+        assertThat(fetched.getEmail()).isEqualTo("test1@test.com");
+    }
+
+    @Test
+    void shouldDeleteClient(){
+        // Создаем провайдера для теста
+        Client testClient = createTestClient();
+        System.out.println("Клиент создан");
+
+        // Удаляем его
+        client.deleteClient(testClient.getId());
+        System.out.println("Клиент удален");
+
+        // Проверяем, что он действительно удален
+        assertThatThrownBy(() -> client.getClientById(testClient.getId()))
+                .isInstanceOf(AssertionError.class);
+    }
+
+    private Client createTestClient() {
+        var newClient = new Client()
+                .setName("Test Client")
+                .setEmail("test" + System.currentTimeMillis() + "@test.com")
+                .setPhone("+1234561299")
+                .setCompany("SSLovable");
+
+        return client.createClient(newClient);
+    }
 }
+

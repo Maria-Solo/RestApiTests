@@ -8,12 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.assertj.core.api.Fail.fail;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 public class ProviderTests extends BaseTest {
@@ -127,15 +125,14 @@ public class ProviderTests extends BaseTest {
         assertThat(created.getEmail()).isEqualTo("test@provider.com");
         assertThat(created.getCreatedAt()).isNotNull();
     }
-/*
+
     @Test
     void shouldUpdateProvider() {
-        Provider updatedProvider = Provider.builder()
-                .name("Updated Provider")
-                .email("update@provider.com")
-                .phone("+1234567891")
-                .serviceType(Provider.ServiceType.SECURITY)
-                .build();
+        var updatedProvider = new Provider()
+                .setName("Updated Provider")
+                .setEmail("update@provider.com")
+                .setPhone("+1234567891")
+                .setServiceType(Provider.ServiceType.SECURITY);
 
         Provider updated = clientProvider.updateProvider(6, updatedProvider);
 
@@ -167,14 +164,12 @@ public class ProviderTests extends BaseTest {
     }
 
     private Provider createTestProvider() {
-        Provider newProvider = Provider.builder()
-                .name("Test Provider " + System.currentTimeMillis())
-                .email("test" + System.currentTimeMillis() + "@test.com")
-                .serviceType(Provider.ServiceType.CLOUD)
-                .build();
+        var newProvider = new Provider()
+                .setName("Test Provider " + System.currentTimeMillis())
+                .setEmail("test" + System.currentTimeMillis() + "@test.com")
+                .setServiceType(Provider.ServiceType.CLOUD);
 
         return clientProvider.createProvider(newProvider);
     }
 
- */
 }
