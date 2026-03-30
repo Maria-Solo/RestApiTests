@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
-@Accessors
+@Accessors(chain = true)
 public class Task {
     public Long id;
     public String title;

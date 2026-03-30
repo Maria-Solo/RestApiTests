@@ -1,13 +1,19 @@
 package com.mary.tests;
 
 import com.mary.BaseTest;
+import com.mary.DTO.TaskDTO;
 import com.mary.client.TaskApiClient;
+import com.mary.models.Client;
+import com.mary.models.Task;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -92,4 +98,37 @@ public class TaskTests extends BaseTest {
                 .body(matchesJsonSchemaInClasspath("schemas/task-schema.json"));
     }
 
+    @Test
+    void shouldGetAllTasks(){
+        List<Task> tasks = task.getAllTasks();
+        assertThat(tasks)
+                .isNotEmpty();
+    }
+
+    @Test
+    void shouldGetOneTaskById(){
+        Task foundTask = task.getTaskById(1L);
+        assertThat(foundTask.getId()).isEqualTo(1);
+        assertThat(foundTask.getTitle()).isEqualTo("Setup cloud infrastructure");
+    }
+/*
+    @Test
+    void shouldCreateTask(){
+        var newTask = new Task()
+                .setTitle("Test")
+                .setDescription("testing")
+                .setStatus("IN PROGRESS")
+                .setClientId(1L)
+                .setProviderId(1L);
+        Task created = task.createTask(newTask);
+
+        assertThat(created.getTitle()).isEqualTo("Test");
+        assertThat(created.getDescription()).isEqualTo("testing");
+        assertThat(created.getStatus()).isEqualTo("IN PROGRESS");
+        assertThat(created.getClientId()).isEqualTo(1L);
+        assertThat(created.getProviderId()).isEqualTo(1L);
+    }
+
+
+ */
 }

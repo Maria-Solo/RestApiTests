@@ -76,6 +76,7 @@ public class ClientApiClient {
 
     public Client createClient(Client client){
         Response response = given()
+                .body(client)
                 .when()
                 .post("/clients");
         response.then().statusCode(201);
