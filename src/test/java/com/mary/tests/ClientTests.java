@@ -150,7 +150,7 @@ public class ClientTests extends BaseTest {
 
     @Test
     void shouldDeleteClient(){
-        // Создаем провайдера для теста
+        // Создаем клиента для теста
         Client testClient = createTestClient();
         System.out.println("Клиент создан");
 

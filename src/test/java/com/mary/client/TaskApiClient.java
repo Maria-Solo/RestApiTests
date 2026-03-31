@@ -52,19 +52,6 @@ public class TaskApiClient {
                 .get("/tasks");
         response.then().statusCode(200);
         return Arrays.asList(response.as(Task[].class));
-/*
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        String jsonString = response.asString();
-        try {
-            return mapper.readValue(jsonString, new TypeReference<List<Client>>() {});
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to deserialize clients", e);
-        }
-
- */
     }
 
     public Task getTaskById(Long id) {

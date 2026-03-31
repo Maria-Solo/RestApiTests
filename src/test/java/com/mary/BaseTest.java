@@ -3,9 +3,12 @@ package com.mary;
 import com.mary.client.AuthApiClient;
 import com.mary.models.auth.login.LoginRequest;
 import com.mary.models.auth.login.LoginResponse;
+import com.mary.models.auth.register.RegisterRequest;
+import com.mary.models.auth.register.RegisterResponse;
 import com.mary.specs.RequestSpec;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static io.restassured.config.RestAssuredConfig.config;
 
@@ -23,6 +26,17 @@ public class BaseTest {
        String refreshToken = loginResponse.refreshToken();
 
        RestAssured.requestSpecification.header("Authorization", "Bearer " + accessToken);
+    }
+
+    @Test
+    public void registerUserTest(){
+        RestAssured.requestSpecification = RequestSpec.requestSpec();
+        AuthApiClient authApiClient = new AuthApiClient();
+        RegisterRequest registerRequest = new RegisterRequest();
+        RegisterResponse registerResponse = authApiClient.register(registerRequest);
+
+        String accessToken =  registerResponse.accessToken();
+        String refreshToken = registerResponse.refreshToken();
 
     }
 }

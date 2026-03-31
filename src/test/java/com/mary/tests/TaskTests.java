@@ -1,7 +1,6 @@
 package com.mary.tests;
 
 import com.mary.BaseTest;
-import com.mary.DTO.TaskDTO;
 import com.mary.client.TaskApiClient;
 import com.mary.models.Client;
 import com.mary.models.Task;
@@ -14,6 +13,7 @@ import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -111,7 +111,7 @@ public class TaskTests extends BaseTest {
         assertThat(foundTask.getId()).isEqualTo(1);
         assertThat(foundTask.getTitle()).isEqualTo("Setup cloud infrastructure");
     }
-/*
+
     @Test
     void shouldCreateTask(){
         var newTask = new Task()
@@ -125,10 +125,41 @@ public class TaskTests extends BaseTest {
         assertThat(created.getTitle()).isEqualTo("Test");
         assertThat(created.getDescription()).isEqualTo("testing");
         assertThat(created.getStatus()).isEqualTo("IN PROGRESS");
-        assertThat(created.getClientId()).isEqualTo(1L);
-        assertThat(created.getProviderId()).isEqualTo(1L);
+        assertThat(created.getClient().getId()).isEqualTo(1L);
+        assertThat(created.getProvider().getId()).isEqualTo(1L);
     }
 
+    @Test
+    void shouldUpdateTask(){
+        var updatedTask = new Task()
+                .setTitle("Test1")
+                .setDescription("testing1")
+                .setStatus("DONE")
+                .setClientId(1L)
+                .setProviderId(1L);
+        Task updated = task.updateTask(7l, updatedTask);
 
- */
+        assertThat(updated.getTitle()).isEqualTo("Test1");
+        assertThat(updated.getDescription()).isEqualTo("testing1");
+        assertThat(updated.getStatus()).isEqualTo("DONE");
+        assertThat(updated.getClient().getId()).isEqualTo(1L);
+        assertThat(updated.getProvider().getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void shouldDeleteTask(){
+        var deleteTask = new Task()
+                .setTitle("Test deleting")
+                .setDescription("deleting")
+                .setStatus("DONE")
+                .setClientId(1L)
+                .setProviderId(1L);
+        Task deletingTask = task.createTask(deleteTask);
+
+        task.delete(Math.toIntExact(deletingTask.getId()));
+
+        assertThatThrownBy(() -> task.getTaskById(deletingTask.getId()))
+                .isInstanceOf(AssertionError.class);
+
+    }
 }

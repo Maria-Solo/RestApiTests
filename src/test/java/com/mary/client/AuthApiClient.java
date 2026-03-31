@@ -26,11 +26,6 @@ public class AuthApiClient {
 
     public LoginResponse login(LoginRequest loginRequest) {
         return given()
-//                .body(loginRequest)
-//                .post("/auth/login")
-//                .then()
-//                .statusCode(200)
-//                .extract().body().as(LoginResponse.class);
                 .body(loginRequest)
                 .log().all()  // Логируем запрос для отладки
                 .post("/auth/login")
@@ -45,7 +40,7 @@ public class AuthApiClient {
                 .body(registerRequest)
                 .post("/auth/register")
                 .then()
-                .statusCode(200)
+                .statusCode(201)
                 .extract().body().as(RegisterResponse.class);
     }
 }
