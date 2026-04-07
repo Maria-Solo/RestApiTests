@@ -35,6 +35,19 @@ public class AuthApiClient {
                 .extract().body().as(LoginResponse.class);
     }
 
+    public String getRefreshTokenViaAuth(LoginRequest loginRequest) {
+        return given()
+                .body(loginRequest)
+                .log().all()  // Логируем запрос для отладки
+                .post("/auth/login")
+                .then()
+                .log().all()  // Логируем ответ для отладки
+                .statusCode(200)
+                 .extract()
+                 .jsonPath()
+                 .getString("refreshToken");
+    }
+
     public RegisterResponse register(RegisterRequest registerRequest) {
         return given()
                 .body(registerRequest)
@@ -43,4 +56,6 @@ public class AuthApiClient {
                 .statusCode(201)
                 .extract().body().as(RegisterResponse.class);
     }
+
+
 }

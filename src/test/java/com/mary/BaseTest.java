@@ -39,4 +39,14 @@ public class BaseTest {
         String refreshToken = registerResponse.refreshToken();
 
     }
+
+    @Test
+    public void getRefreshTokenTest(){
+        RestAssured.requestSpecification = RequestSpec.requestSpec();
+        /// тут вызываем метод авторизации
+        AuthApiClient authApiClient = new AuthApiClient();
+        LoginRequest loginRequest = new LoginRequest();
+        String refreshToken = authApiClient.getRefreshTokenViaAuth(loginRequest);
+        System.out.println(refreshToken);
+    }
 }
