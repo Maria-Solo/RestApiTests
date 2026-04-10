@@ -6,10 +6,12 @@ import com.mary.models.Client;
 import com.mary.models.Provider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
@@ -171,6 +173,17 @@ public class ClientTests extends BaseTest {
                 .setCompany("SSLovable");
 
         return client.createClient(newClient);
+    }
+
+    @Before
+    public void setUp() {
+        Map<String, String> headers = getAuthHeaders("admin@crm.local", "admin123");
+        client.setHeaders(headers);
+    }
+
+    @Test
+    public void testGetClient() {
+        client.getClientByIdHttp(1L);
     }
 }
 

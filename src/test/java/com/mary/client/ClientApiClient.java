@@ -4,17 +4,28 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mary.HttpController;
 import com.mary.models.Client;
 import com.mary.models.Provider;
 import groovyjarjarantlr4.runtime.tree.RewriteEmptyStreamException;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.platform.engine.support.discovery.SelectorResolver;
+import org.springframework.http.HttpMethod;
 
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
 public class ClientApiClient {
+
+    HttpController httpController = new HttpController();
+    private Map<String, String> headers;
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
+    }
 
     public Response getAll(){
         return given()
@@ -97,6 +108,11 @@ public class ClientApiClient {
                 .when()
                 .delete("/clients/" + id);
         response.then().statusCode(204);
+    }
+
+    public Client getClientByIdHttp(Long id){
+        httpController.sendRequest("http://localhost:8080/api/clients/" + id, HttpMethod.GET, headers, null, ContentType.JSON);
+        return null;
     }
 
 }
