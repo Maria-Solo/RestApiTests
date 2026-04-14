@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class RegisterRequest {
-    String email = "old.user@example.com";
-    String password = "secret1234";
-    String confirmPassword = "secret1234";
+    String email;
+    String password;
+    String confirmPassword;
 }

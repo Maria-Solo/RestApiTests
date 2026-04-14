@@ -1,9 +1,12 @@
 package com.mary.tests;
 
 import com.mary.BaseTest;
+import com.mary.HttpController;
+import com.mary.client.AuthApiClient;
 import com.mary.client.ClientApiClient;
 import com.mary.models.Client;
 import com.mary.models.Provider;
+import io.restassured.http.ContentType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
@@ -17,13 +20,16 @@ import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.setAllowComparingPrivateFields;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClientTests extends BaseTest {
     private static final Log log = LogFactory.getLog(ClientTests.class);
     ClientApiClient client = new ClientApiClient();
+
 
     @Test
     @DisplayName("Get-запрос за списком клиентов с проверкой статус-кода и размера списка")
@@ -175,15 +181,20 @@ public class ClientTests extends BaseTest {
         return client.createClient(newClient);
     }
 
-    @Before
-    public void setUp() {
-        Map<String, String> headers = getAuthHeaders("admin@crm.local", "admin123");
-        client.setHeaders(headers);
-    }
-
     @Test
-    public void testGetClient() {
-        client.getClientByIdHttp(1L);
-    }
+    void shouldGetAllClients1(){
+    var email = "admin@crm.local";
+    var password = "admin123";
+    var headers = getHeaders(email, password);
+    var response = client.getAllClients1(headers);
+
+    assertEquals(3, response.size(), "Size of response is not equal to expected");
+    };
+
+private Map<String, String> getHeaders(String email, String password) {
+
+    return getAuthHeaders(email, password);
+}
+
 }
 

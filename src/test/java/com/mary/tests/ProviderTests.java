@@ -1,6 +1,7 @@
 package com.mary.tests;
 
 import com.mary.BaseTest;
+import com.mary.client.AuthApiClient;
 import com.mary.client.ProviderApiClient;
 import com.mary.models.Provider;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import static org.hamcrest.Matchers.hasSize;
 public class ProviderTests extends BaseTest {
 
     ProviderApiClient clientProvider = new ProviderApiClient();
+
 
     @Test
     @DisplayName("Список провайдеров с проверкой статуса и размера массива")

@@ -20,12 +20,12 @@ import static io.restassured.RestAssured.given;
 
 public class ClientApiClient {
 
+    private static final String BASE_URL = "http://localhost:8080/api/clients";
+    ObjectMapper mapper = new ObjectMapper();
+
     HttpController httpController = new HttpController();
     private Map<String, String> headers;
 
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
 
     public Response getAll(){
         return given()
@@ -110,9 +110,25 @@ public class ClientApiClient {
         response.then().statusCode(204);
     }
 
-    public Client getClientByIdHttp(Long id){
-        httpController.sendRequest("http://localhost:8080/api/clients/" + id, HttpMethod.GET, headers, null, ContentType.JSON);
-        return null;
+    public Client getClientByIdHttp(Long id, Map<String, String> headers){
+        return httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
+                .extract().as(Client.class);
+
     }
+
+    public List<Client> getAllClients1(Map<String, String> headers){
+       var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
+               .extract().response();
+       mapper.registerModule(new JavaTimeModule());
+       try {
+          return mapper.readValue(response.asString(), new TypeReference<>() {
+          }) ;
+       }
+       catch (JsonProcessingException e) {
+           throw new RuntimeException("Failed to deserialize clients", e);
+       }
+    }
+//TODO rewrite these methods using http controller + base url
+
 
 }

@@ -1,6 +1,7 @@
 package com.mary.tests;
 
 import com.mary.BaseTest;
+import com.mary.client.AuthApiClient;
 import com.mary.client.TaskApiClient;
 import com.mary.models.Client;
 import com.mary.models.Task;
@@ -20,6 +21,8 @@ import static org.hamcrest.Matchers.hasSize;
 public class TaskTests extends BaseTest {
 
     TaskApiClient task = new TaskApiClient();
+
+
 
     @Test
     @DisplayName("Список задач с проверкой статуса и размера массива")

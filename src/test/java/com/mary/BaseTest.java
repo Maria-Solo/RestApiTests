@@ -10,7 +10,10 @@ import com.mary.models.auth.register.RegisterRequest;
 import com.mary.models.auth.register.RegisterResponse;
 import com.mary.specs.RequestSpec;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.http.Header;
+import io.restassured.response.ValidatableResponse;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -20,13 +23,14 @@ import static io.restassured.config.RestAssuredConfig.config;
 
 public class BaseTest {
 
-    private static AuthApiClient authApiClient = new AuthApiClient();
-    private static LoginRequest loginRequest = new LoginRequest();
-    private RegisterRequest registerRequest = new RegisterRequest();
-    ClientApiClient clientApiClient = new ClientApiClient();
+    private AuthApiClient authApiClient = new AuthApiClient();
+    private HttpController httpController= new HttpController();
 
 
-    @BeforeAll
+
+
+/*
+    //@BeforeAll
     public static void setup() {
         var authHeaders = getAuthHeaders("admin@crm.local", "admin123");
         RestAssured.requestSpecification = RequestSpec.requestSpec(authHeaders);
@@ -74,11 +78,15 @@ public class BaseTest {
         System.out.println(clientApiClient.getAllClients());
     }
 
-    protected static Map<String, String> getAuthHeaders(String email, String password){
+ */
+
+    protected Map<String, String> getAuthHeaders(String email, String password){
         var loginRequest = new LoginRequest()
                 .setEmail(email)
                 .setPassword(password);
-        String accessToken = authApiClient.login(loginRequest).accessToken();
+//        String accessToken = authApiClient.login(loginRequest).accessToken();
+        String accessToken = httpController.sendRequest("http://localhost:8080/api/auth/login", HttpController.HttpMethod.POST, null, loginRequest, ContentType.JSON)
+                .extract().as(LoginResponse.class).accessToken();
         return Map.of("Authorization", "Bearer " + accessToken);
     }
 }

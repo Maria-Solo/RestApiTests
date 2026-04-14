@@ -5,6 +5,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.HttpMethod;
+//import org.springframework.http.HttpMethod;
 
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import static org.springframework.http.HttpMethod.*;
 
 public class HttpController {
 
-    public enum Method {
+    public enum HttpMethod {
         GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD
     }
 
@@ -24,7 +25,6 @@ public class HttpController {
 
 
         var request = prepareRequest(headers, body, contentType);
-
 
         return executeRequest(request, url, method);
     }
@@ -44,7 +44,7 @@ public class HttpController {
 
         return request;
     }
-
+    /*
     private ValidatableResponse executeRequest(RequestSpecification request, String url, HttpMethod method) {
         if (method == HttpMethod.POST) {
             return request.log().all().post(url).then().log().all();
@@ -65,7 +65,10 @@ public class HttpController {
         }
     }
 
-    /*
+
+
+     */
+
 
     private ValidatableResponse executeRequest(RequestSpecification request, String url, HttpMethod method) {
         return switch (method) {
@@ -80,6 +83,6 @@ public class HttpController {
     }
 
 
-     */
+
 
 }
