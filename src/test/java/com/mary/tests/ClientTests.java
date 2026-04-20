@@ -188,13 +188,42 @@ public class ClientTests extends BaseTest {
     var headers = getHeaders(email, password);
     var response = client.getAllClients1(headers);
 
-    assertEquals(3, response.size(), "Size of response is not equal to expected");
+    assertEquals(6, response.size(), "Size of response is not equal to expected");
     };
 
-private Map<String, String> getHeaders(String email, String password) {
+    private Map<String, String> getHeaders(String email, String password) {
 
     return getAuthHeaders(email, password);
 }
+
+
+    @Test
+    void shouldGetClientById1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var response = client.getClientById1(headers, 1L);
+
+        assertEquals("John Doe", response.getName());
+    };
+
+    @Test
+    void shouldCreateClient1(){
+
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var newClient = new Client()
+                .setName("Test")
+                .setEmail("test@test.com")
+                .setPhone("+1234561212")
+                .setCompany("SSL");
+        var response = client.createClient1(headers, newClient);
+        assertEquals("Test", response.getName());
+        assertEquals("test@test.com", response.getEmail());
+        assertEquals("+1234561212", response.getPhone());
+        assertEquals("SSL", response.getCompany());
+    }
 
 }
 

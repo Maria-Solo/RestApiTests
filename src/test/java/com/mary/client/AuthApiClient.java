@@ -26,7 +26,7 @@ public class AuthApiClient {
 
     public LoginResponse login(LoginRequest loginRequest) {
         return given()
-                .contentType(ContentType.JSON)
+                //.contentType(ContentType.JSON)
                 .body(loginRequest)
                 .log().all()  // Логируем запрос для отладки
                 .post("/auth/login")

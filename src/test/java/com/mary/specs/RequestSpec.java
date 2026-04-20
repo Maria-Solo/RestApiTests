@@ -18,8 +18,8 @@ public class RequestSpec {
     public static RequestSpecification requestSpec(Map<String, String > headers){
 
         return new RequestSpecBuilder()
-                .setBaseUri("http://localhost:8080/api")
-//                .setBasePath("/api")
+                .setBaseUri("http://localhost:8080")
+                .setBasePath("/api")
                 .setContentType(ContentType.JSON)
                 .addHeaders(headers)
                 .build();

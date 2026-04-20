@@ -27,26 +27,26 @@ public class ClientApiClient {
     private Map<String, String> headers;
 
 
-    public Response getAll(){
+    public Response getAll() {
         return given()
                 .when()
                 .get("/clients");
     }
 
-    public Response getById(int id){
+    public Response getById(int id) {
         return given()
                 .when()
                 .get("/clients/" + id);
     }
 
-    public Response create(String body){
+    public Response create(String body) {
         return given()
                 .body(body)
                 .when()
                 .post("/clients");
     }
 
-    public Response update(String body, int id){
+    public Response update(String body, int id) {
         return given()
                 .body(body)
                 .when()
@@ -59,11 +59,11 @@ public class ClientApiClient {
                 .delete("/clients/" + id);
     }
 
-    public List<Client> getAllClients(){
+    public List<Client> getAllClients() {
         Response response = given()
                 .when()
                 .get("/clients");
-                response.then().statusCode(200);
+        response.then().statusCode(200);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -71,13 +71,14 @@ public class ClientApiClient {
 
         String jsonString = response.asString();
         try {
-            return mapper.readValue(jsonString, new TypeReference<List<Client>>() {});
+            return mapper.readValue(jsonString, new TypeReference<List<Client>>() {
+            });
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to deserialize clients", e);
         }
     }
 
-    public Client getClientById(Long id){
+    public Client getClientById(Long id) {
         Response response = given()
                 .when()
                 .get("/clients/" + id);
@@ -85,7 +86,7 @@ public class ClientApiClient {
         return response.as(Client.class);
     }
 
-    public Client createClient(Client client){
+    public Client createClient(Client client) {
         Response response = given()
                 .body(client)
                 .when()
@@ -94,7 +95,7 @@ public class ClientApiClient {
         return response.as(Client.class);
     }
 
-    public Client updateClient(Long id, Client client){
+    public Client updateClient(Long id, Client client) {
         Response response = given()
                 .body(client)
                 .when()
@@ -103,32 +104,72 @@ public class ClientApiClient {
         return response.as(Client.class);
     }
 
-    public void deleteClient(Long id){
+    public void deleteClient(Long id) {
         Response response = given()
                 .when()
                 .delete("/clients/" + id);
         response.then().statusCode(204);
     }
 
-    public Client getClientByIdHttp(Long id, Map<String, String> headers){
+    public Client getClientByIdHttp(Long id, Map<String, String> headers) {
         return httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
                 .extract().as(Client.class);
 
     }
 
-    public List<Client> getAllClients1(Map<String, String> headers){
-       var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
-               .extract().response();
-       mapper.registerModule(new JavaTimeModule());
-       try {
-          return mapper.readValue(response.asString(), new TypeReference<>() {
-          }) ;
-       }
-       catch (JsonProcessingException e) {
-           throw new RuntimeException("Failed to deserialize clients", e);
-       }
+    public List<Client> getAllClients1(Map<String, String> headers) {
+        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
+                .extract().response();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            return mapper.readValue(response.asString(), new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize clients", e);
+        }
     }
 //TODO rewrite these methods using http controller + base url
 
+    public Client getClientById1(Map<String, String> headers, Long id) {
+        var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
+                .extract().response();
+        //это надо?
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            return mapper.readValue(response.asString(), new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize clients", e);
+        }
+    }
 
+    public Client createClient1(Map<String, String> headers, Client client) {
+        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, client, ContentType.TEXT)
+                .extract().response();
+        //это надо?
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            return mapper.readValue(response.asString(), new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize clients", e);
+        }
+    }
+
+    public Client updateClient1(Map<String, String> headers, Long id, Client client) {
+        var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.PUT, headers, client, ContentType.ANY)
+                .extract().response();
+        //это надо?
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            return mapper.readValue(response.asString(), new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize clients", e);
+        }
+    }
+
+    public void deleteClient1(Map<String, String> headers, Long id) {
+        httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.DELETE, headers, null, ContentType.ANY);
+    }
 }
