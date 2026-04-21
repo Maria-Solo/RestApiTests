@@ -144,7 +144,7 @@ public class ClientApiClient {
     }
 
     public Client createClient1(Map<String, String> headers, Client client) {
-        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, client, ContentType.TEXT)
+        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, client, ContentType.ANY)
                 .extract().response();
         //это надо?
         mapper.registerModule(new JavaTimeModule());
