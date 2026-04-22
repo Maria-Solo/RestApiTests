@@ -144,9 +144,9 @@ public class ClientApiClient {
     }
 
     public Client createClient1(Map<String, String> headers, Client client) {
-        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, client, ContentType.ANY)
+        /*
+        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, client, ContentType.JSON)
                 .extract().response();
-        //это надо?
         mapper.registerModule(new JavaTimeModule());
         try {
             return mapper.readValue(response.asString(), new TypeReference<>() {
@@ -154,10 +154,15 @@ public class ClientApiClient {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to deserialize clients", e);
         }
+
+         */
+        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, client, ContentType.JSON)
+                .extract().response();
+        return response.as(Client.class);
     }
 
     public Client updateClient1(Map<String, String> headers, Long id, Client client) {
-        var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.PUT, headers, client, ContentType.ANY)
+        var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.PUT, headers, client, ContentType.JSON)
                 .extract().response();
         //это надо?
         mapper.registerModule(new JavaTimeModule());

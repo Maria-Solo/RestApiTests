@@ -225,5 +225,34 @@ public class ClientTests extends BaseTest {
         assertEquals("SSL", response.getCompany());
     }
 
+    @Test
+    void shouldUpdateClient1(){
+
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var newClient = new Client()
+                .setName("Test3")
+                .setEmail("test3@test.com")
+                .setPhone("+1234561214")
+                .setCompany("SSLovable1");
+        var response = client.updateClient1(headers, 6L, newClient);
+        assertEquals("Test3", response.getName());
+        assertEquals("test3@test.com", response.getEmail());
+        assertEquals("+1234561214", response.getPhone());
+        assertEquals("SSLovable1", response.getCompany());
+    }
+
+    @Test
+    void shouldDeleteClient1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        client.deleteClient1(headers, 6L);
+
+        var response = client.getAllClients1(headers);
+        assertEquals(5, response.size(), "Size of response is not equal to expected");
+    }
+
 }
 

@@ -3,11 +3,13 @@ package com.mary.tests;
 import com.mary.BaseTest;
 import com.mary.client.AuthApiClient;
 import com.mary.client.ProviderApiClient;
+import com.mary.models.Client;
 import com.mary.models.Provider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
@@ -15,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ProviderTests extends BaseTest {
 
     ProviderApiClient clientProvider = new ProviderApiClient();
@@ -172,6 +176,76 @@ public class ProviderTests extends BaseTest {
                 .setServiceType(Provider.ServiceType.CLOUD);
 
         return clientProvider.createProvider(newProvider);
+    }
+
+    @Test
+    void shouldGetAllProviders1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var response = clientProvider.getAllProviders1(headers);
+        assertEquals(3, response.size(), "Size of response is not equal to expected");
+    };
+
+    private Map<String, String> getHeaders(String email, String password) {
+
+        return getAuthHeaders(email, password);
+    }
+
+
+    @Test
+    void shouldGetProviderById1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var response = clientProvider.getProviderById1(headers, 1L);
+
+        assertEquals("Cloud Provider", response.getName());
+    };
+
+    @Test
+    void shouldCreateProvider1(){
+
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var newProvider = new Provider()
+                .setName("New Provider")
+                .setEmail("test@provider.com")
+                .setPhone("+1234567890")
+                .setServiceType(Provider.ServiceType.SECURITY);
+        var response = clientProvider.createProvider1(headers, newProvider);
+        assertEquals("New Provider", response.getName());
+        assertEquals("test@provider.com", response.getEmail());
+        assertEquals("+1234567890", response.getPhone());
+    }
+
+    @Test
+    void shouldUpdateProvider1(){
+
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var newProvider = new Provider()
+                .setName("New Provider1")
+                .setEmail("test1@provider.com")
+                .setPhone("+1234567891")
+                .setServiceType(Provider.ServiceType.SECURITY);
+        var response = clientProvider.updateProvider1(headers, 4L, newProvider);
+        assertEquals("New Provider1", response.getName());
+        assertEquals("test1@provider.com", response.getEmail());
+        assertEquals("+1234567891", response.getPhone());
+    }
+
+    @Test
+    void shouldDeleteProvider1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        clientProvider.deleteProvider1(headers, 4L);
+
+        var response = clientProvider.getAllProviders1(headers);
+        assertEquals(3, response.size(), "Size of response is not equal to expected");
     }
 
 }
