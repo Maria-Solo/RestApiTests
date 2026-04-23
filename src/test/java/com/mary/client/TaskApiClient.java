@@ -97,7 +97,7 @@ public class TaskApiClient {
         response.then().statusCode(204);
     }
 
-    public List<Provider> getAllProviders1(Map<String, String> headers) {
+    public List<Task> getAllTasks1(Map<String, String> headers) {
         var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
                 .extract().response();
         mapper.registerModule(new JavaTimeModule());
@@ -105,11 +105,11 @@ public class TaskApiClient {
             return mapper.readValue(response.asString(), new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to deserialize providers", e);
+            throw new RuntimeException("Failed to deserialize tasks", e);
         }
     }
 
-    public Provider getProviderById1(Map<String, String> headers, Long id) {
+    public Task getTaskById1(Map<String, String> headers, Long id) {
         var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
                 .extract().response();
         mapper.registerModule(new JavaTimeModule());
@@ -117,42 +117,23 @@ public class TaskApiClient {
             return mapper.readValue(response.asString(), new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to deserialize provider", e);
+            throw new RuntimeException("Failed to deserialize task", e);
         }
     }
 
-    public Provider createProvider1(Map<String, String> headers, Provider provider) {
-        /*
-        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, client, ContentType.JSON)
+    public Task createTask1(Map<String, String> headers, Task task) {
+        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, task, ContentType.JSON)
                 .extract().response();
-        mapper.registerModule(new JavaTimeModule());
-        try {
-            return mapper.readValue(response.asString(), new TypeReference<>() {
-            });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to deserialize clients", e);
-        }
-
-         */
-        var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.POST, headers, provider, ContentType.JSON)
-                .extract().response();
-        return response.as(Provider.class);
+        return response.as(Task.class);
     }
 
-    public Provider updateProvider1(Map<String, String> headers, Long id, Provider provider) {
-        var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.PUT, headers, provider, ContentType.JSON)
+    public Task updateTask1(Map<String, String> headers, Long id, Task task) {
+        var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.PUT, headers, task, ContentType.JSON)
                 .extract().response();
-        //это надо?
-        mapper.registerModule(new JavaTimeModule());
-        try {
-            return mapper.readValue(response.asString(), new TypeReference<>() {
-            });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to deserialize provider", e);
-        }
+        return response.as(Task.class);
     }
 
-    public void deleteProvider1(Map<String, String> headers, Long id) {
+    public void deleteTask1(Map<String, String> headers, Long id) {
         httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.DELETE, headers, null, ContentType.ANY);
     }
 

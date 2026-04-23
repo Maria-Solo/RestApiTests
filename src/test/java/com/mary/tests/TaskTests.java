@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.mary.specs.RequestSpec.requestSpec;
 import static io.restassured.RestAssured.given;
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTests extends BaseTest {
 
@@ -163,6 +165,74 @@ public class TaskTests extends BaseTest {
 
         assertThatThrownBy(() -> task.getTaskById(deletingTask.getId()))
                 .isInstanceOf(AssertionError.class);
+    }
 
+    @Test
+    void shouldGetAllTasks1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var response = task.getAllTasks1(headers);
+        assertEquals(7, response.size(), "Size of response is not equal to expected");
+    }
+
+    private Map<String, String> getHeaders(String email, String password) {
+        return getAuthHeaders(email, password);
+    }
+
+    @Test
+    void shouldGetTaskById1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var response = task.getTaskById1(headers, 1L);
+
+        assertEquals("Setup cloud infrastructure", response.getTitle());
+    }
+
+    @Test
+    void shouldGetCreateTask() {
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var newTask = new Task()
+                .setTitle("Test")
+                .setDescription("testing")
+                .setStatus("IN PROGRESS")
+                .setClientId(1L)
+                .setProviderId(1L);
+        var response = task.createTask1(headers, newTask);
+        assertEquals(newTask.getTitle(), response.getTitle());
+        assertEquals(newTask.getDescription(), response.getDescription());
+        assertEquals(newTask.getStatus(), response.getStatus());
+        assertEquals(newTask.getClientId(), response.getClient().getId());
+    }
+
+    @Test
+    void shouldUpdateTask1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        var updatedTask = new Task()
+                .setTitle("Test3")
+                .setDescription("testing3")
+                .setStatus("DONE")
+                .setClientId(2L)
+                .setProviderId(2L);
+        var response = task.updateTask1(headers, 12L, updatedTask);
+        assertEquals(updatedTask.getTitle(), response.getTitle());
+        assertEquals(updatedTask.getDescription(), response.getDescription());
+        assertEquals(updatedTask.getStatus(), response.getStatus());
+        assertEquals(updatedTask.getClientId(), response.getClient().getId());
+    }
+
+    @Test
+    void shouldDeleteTask1(){
+        var email = "admin@crm.local";
+        var password = "admin123";
+        var headers = getHeaders(email, password);
+        task.deleteTask1(headers, 12L);
+        assertThatThrownBy(() -> task.getTaskById1(headers, 12L));
+            //    .isInstanceOf(NotFoundException.class);
     }
 }
