@@ -4,12 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-import org.springframework.http.HttpMethod;
-//import org.springframework.http.HttpMethod;
 
 import java.util.Map;
-
-import static org.springframework.http.HttpMethod.*;
 
 public class HttpController {
 
@@ -22,16 +18,14 @@ public class HttpController {
                                            Map<String, String> headers,
                                            Object body,
                                            ContentType contentType) {
-
-
-        var request = prepareRequest(headers, body, contentType);
+         
+        RequestSpecification request = prepareRequest(headers, body, contentType);
 
         return executeRequest(request, url, method);
     }
 
     private RequestSpecification prepareRequest(Map<String, String> headers, Object body, ContentType contentType) {
-        var request = RestAssured.given();
-
+        RequestSpecification request = RestAssured.given();
 
         if (headers != null && !headers.isEmpty()) {
             request.headers(headers);
@@ -44,31 +38,6 @@ public class HttpController {
 
         return request;
     }
-    /*
-    private ValidatableResponse executeRequest(RequestSpecification request, String url, HttpMethod method) {
-        if (method == HttpMethod.POST) {
-            return request.log().all().post(url).then().log().all();
-        } else if (method == HttpMethod.PUT) {
-            return request.log().all().put(url).then().log().all();
-        } else if (method == HttpMethod.DELETE) {
-            return request.log().all().delete(url).then().log().all();
-        } else if (method == HttpMethod.PATCH) {
-            return request.log().all().patch(url).then().log().all();
-        } else if (method == HttpMethod.GET) {
-            return request.log().all().get(url).then().log().all();
-        } else if (method == HttpMethod.OPTIONS) {
-            return request.log().all().options(url).then().log().all();
-        } else if (method == HttpMethod.HEAD) {
-            return request.log().all().head(url).then().log().all();
-        } else {
-            throw new IllegalArgumentException("Unsupported HTTP method: " + method);
-        }
-    }
-
-
-
-     */
-
 
     private ValidatableResponse executeRequest(RequestSpecification request, String url, HttpMethod method) {
         return switch (method) {
@@ -81,8 +50,4 @@ public class HttpController {
             case HEAD -> request.log().all().head(url).then().log().all();
         };
     }
-
-
-
-
 }
