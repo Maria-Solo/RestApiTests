@@ -91,8 +91,6 @@ public class ClientTests extends BaseTest {
         var headers = getHeaders(email, password);
         client.deleteClient(headers, 11L);
         assertThatThrownBy(() -> client.getClientById(headers, 11L));
-        //var response = client.getAllClients(headers);
-        //assertEquals(6, response.size(), "Size of response is not equal to expected");
     }
 
 }
