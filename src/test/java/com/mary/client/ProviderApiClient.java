@@ -3,6 +3,7 @@ package com.mary.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mary.HttpController;
 import com.mary.models.Provider;
@@ -17,7 +18,9 @@ import static io.restassured.RestAssured.given;
 public class ProviderApiClient {
 
     private static final String BASE_URL = "http://localhost:8080/api/providers";
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     HttpController httpController = new HttpController();
 
@@ -30,7 +33,7 @@ public class ProviderApiClient {
     public List<Provider> getAllProviders(Map<String, String> headers) {
         var response = httpController.sendRequest(BASE_URL, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
                 .extract().response();
-        mapper.registerModule(new JavaTimeModule());
+
         try {
             return mapper.readValue(response.asString(), new TypeReference<>() {
             });
@@ -42,7 +45,7 @@ public class ProviderApiClient {
     public Provider getProviderById(Map<String, String> headers, Long id) {
         var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
                 .extract().response();
-        mapper.registerModule(new JavaTimeModule());
+
         try {
             return mapper.readValue(response.asString(), new TypeReference<>() {
             });
@@ -66,8 +69,7 @@ public class ProviderApiClient {
     public Provider updateProvider(Map<String, String> headers, Long id, Provider provider) {
         var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.PUT, headers, provider, ContentType.JSON)
                 .extract().response();
-        //это надо?
-        mapper.registerModule(new JavaTimeModule());
+
         try {
             return mapper.readValue(response.asString(), new TypeReference<>() {
             });

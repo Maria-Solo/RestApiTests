@@ -3,6 +3,7 @@ package com.mary.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mary.HttpController;
 import com.mary.models.Client;
@@ -15,7 +16,9 @@ import static io.restassured.RestAssured.given;
 public class ClientApiClient {
 
     private static final String BASE_URL = "http://localhost:8080/api/clients";
-    ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);;
 
     HttpController httpController = new HttpController();
 
@@ -46,8 +49,7 @@ public class ClientApiClient {
     public Client getClientById(Map<String, String> headers, Long id) {
         var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.GET, headers, null, ContentType.ANY)
                 .extract().response();
-        //это надо?
-        mapper.registerModule(new JavaTimeModule());
+
         try {
             return mapper.readValue(response.asString(), new TypeReference<>() {
             });
@@ -65,8 +67,7 @@ public class ClientApiClient {
     public Client updateClient(Map<String, String> headers, Long id, Client client) {
         var response = httpController.sendRequest(BASE_URL + "/" + id, HttpController.HttpMethod.PUT, headers, client, ContentType.JSON)
                 .extract().response();
-        //это надо?
-        mapper.registerModule(new JavaTimeModule());
+
         try {
             return mapper.readValue(response.asString(), new TypeReference<>() {
             });

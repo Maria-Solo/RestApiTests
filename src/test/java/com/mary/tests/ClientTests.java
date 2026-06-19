@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mary.BaseTest;
 import com.mary.client.ClientApiClient;
 import com.mary.fixtures.ClientFixture;
-import com.mary.models.Client;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +14,7 @@ import java.util.Map;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClientTests extends BaseTest {
     private static final Log log = LogFactory.getLog(ClientTests.class);
@@ -77,7 +76,7 @@ public class ClientTests extends BaseTest {
         var password = "admin123";
         var headers = getHeaders(email, password);
         var newClient = fixture.validClient();
-        var response = client.updateClient(headers, 11L, newClient);
+        var response = client.updateClient(headers, 9L, newClient);
         assertEquals(newClient.getName(), response.getName());
         assertEquals(newClient.getEmail(), response.getEmail());
         assertEquals(newClient.getPhone(), response.getPhone());

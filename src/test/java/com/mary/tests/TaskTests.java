@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mary.BaseTest;
 import com.mary.client.TaskApiClient;
 import com.mary.fixtures.TaskFixture;
-import com.mary.models.Task;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

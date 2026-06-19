@@ -72,7 +72,7 @@ public class ProviderTests extends BaseTest {
         var password = "admin123";
         var headers = getHeaders(email, password);
         var newProvider = fixture.validProvider();
-        var response = clientProvider.updateProvider(headers, 12L, newProvider);
+        var response = clientProvider.updateProvider(headers, 7L, newProvider);
         assertEquals(newProvider.getName(), response.getName());
         assertEquals(newProvider.getEmail(), response.getEmail());
         assertEquals(newProvider.getPhone(), response.getPhone());
@@ -84,7 +84,6 @@ public class ProviderTests extends BaseTest {
         var password = "admin123";
         var headers = getHeaders(email, password);
         clientProvider.deleteProvider(headers, 12L);
-        var response = clientProvider.getAllProviders(headers);
         assertThatThrownBy(() -> clientProvider.getProviderById(headers, 12L));
     }
 
